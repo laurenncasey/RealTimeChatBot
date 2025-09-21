@@ -1,0 +1,14 @@
+{
+
+  "dependencies": {
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "scripts": {
+  "dev": "concurrently \"npm run dev --prefix chat-frontend\" \"npm run dev --prefix chat-backend\""
+
+}
+
+}
