@@ -22,10 +22,20 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  socket.on('sendMessage', (msg) => {
-    console.log('Received message:', msg);
-    io.emit('receiveMessage', msg);
+  socket.on('sendMessage', ({room, message, username}) => {
+    io.to(room).emit('receiveMessage', {room, message: `${username}> ${message}`});
   });
+
+  socket.on('joinRoom', (room) => {
+    socket.join(room);
+    console.log(`User joined room: ${room}`);
+  });
+  
+  socket.on('leaveRoom', (room) => {
+    socket.leave(room);
+    console.log(`User left room ${room}`);
+  });
+
 
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);

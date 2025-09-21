@@ -4,44 +4,77 @@ import { io, Socket } from 'socket.io-client';
 const socket: Socket = io('http://localhost:5713',{ transports: ['websocket'], withCredentials: true}); // Replace with your backend URL after deployment
 
 function App() {
+  const [rooms] = useState(['general', 'tech', 'sports']);
+  const [username, setUsername] = useState('Anon');
+  const [chatHistories, setChatHistories] = useState<{[room:string]:string[]}>({});
   const [message, setMessage] = useState('');
-  const [chat, setChat] = useState<string[]>([]);
+  const [currentRoom, setCurrentRoom] = useState('general');
 
   useEffect(() => {
-    socket.on('receiveMessage', (msg: string) => {
-      setChat(prev => [...prev, msg]);
-    });
-
-    // Clean up the event listener on unmount
+    socket.emit('joinRoom', currentRoom);
     return () => {
-      socket.off('receiveMessage');
+      socket.emit('leaveRoom', currentRoom);
     };
-  }, []);
+
+  }, [currentRoom]);
+
+ useEffect(() => {
+  socket.on('receiveMessage', ({ room, message }) => {
+    setChatHistories(prev => ({
+      ...prev,
+      [room]: [...(prev[room] || []), message]
+    }));
+  });
+
+  return () => {
+    socket.off('receiveMessage');
+  };
+}, []);
+
 
   const sendMessage = () => {
     if (message.trim() !== '') {
-      socket.emit('sendMessage', message);
+      socket.emit('sendMessage', {room: currentRoom, message, username});
       setMessage('');
     }
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h2>Chat App</h2>
-      <div style={{ border: '1px solid #ccc', padding: '1rem', height: '200px', overflowY: 'auto' }}>
-        {chat.map((msg, idx) => (
-          <p key={idx}>{msg}</p>
-        ))}
+    <div style={{display:"flex", flexDirection:"row"}}>
+    <div className="roomsArea">
+    <p className="title">Rooms</p>
+    {rooms.map((room) => (
+      <button onClick={() => setCurrentRoom(room)} className='room' key={room}>#{room}</button>
+      ))}
+      <p>Username</p>
+      <input className="usernameInput" placeholder='Your username here' onChange={(e) => setUsername(e.target.value)}/>
+    </div>
+    <div className="messagePortal">
+      <p className="title">Chat Bot</p>
+      <p className="inRoom">Room: #{currentRoom}</p>
+      <div className="chatboxBorder">
+      {(chatHistories[currentRoom] || []).map((msg, idx) => (
+        <p key={idx} className="message">{msg}</p>
+      ))}
       </div>
+      <div style={{display:"flex", flexDirection:"row", marginTop:"15px"}}>
       <input
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            sendMessage();
+          }
+        }}
         placeholder="Type your message"
-        style={{ width: '70%', marginTop: '1rem' }}
+        className='messageInput'
       />
-      <button onClick={sendMessage} style={{ marginLeft: '1rem' }}>
+      <button onClick={sendMessage} className="submitButton">
         Send
       </button>
+      </div>
+      
+    </div>
     </div>
   );
 }
