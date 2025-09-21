@@ -1,15 +1,26 @@
 {
 
   "dependencies": {
+
     "socket.io-client": "^4.8.1"
+
   },
+
   "devDependencies": {
-    "concurrently": "^9.2.1"
+
+    "concurrently": "^9.2.1",
+
+    "gh-pages": "^6.3.0"
+
   },
+
   "scripts": {
-  "start-backend": "node chat-backend/index.js",
-  "dev": "concurrently \"npm run dev --prefix chat-frontend\" \"npm run dev --prefix chat-backend\""
+
+    "start-backend": "node chat-backend/index.js",
+
+    "dev": "concurrently \"npm run dev --prefix chat-frontend\" \"npm run dev --prefix chat-backend\""
+
+  }
 
 }
 
-}

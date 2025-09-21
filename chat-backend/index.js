@@ -5,7 +5,7 @@ const { Server } = require('socket.io');
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:5173', 
+    origin: 'https://laurenncasey.github.io/RealTimeChatBot/', 
     credentials: true
 }));
 
@@ -13,7 +13,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173', // Your React frontend port
+    origin: 'https://laurenncasey.github.io/RealTimeChatBot/',
     methods: ['GET', 'POST'],
     credentials: true
   },
@@ -41,7 +41,9 @@ io.on('connection', (socket) => {
     console.log('User disconnected:', socket.id);
   });
 });
+const PORT = process.env.PORT || 3000;
 
-server.listen(5713, () => {
-  console.log('Server running on http://localhost:5713');
+
+server.listen(PORT, () => {
+  console.log('Server running on https://realtimechatbot.onrender.com');
 });

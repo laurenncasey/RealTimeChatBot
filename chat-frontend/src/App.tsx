@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const socket: Socket = io('http://localhost:5713',{ transports: ['websocket'], withCredentials: true}); // Replace with your backend URL after deployment
+const socket: Socket = io('https://realtimechatbot.onrender.com',{ transports: ['websocket'], withCredentials: true}); 
 
 function App() {
   const [rooms] = useState(['general', 'tech', 'sports']);
