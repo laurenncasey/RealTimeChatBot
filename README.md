@@ -78,7 +78,7 @@ npm start
 ## Usage
 
 Open the frontend in a browser:
-https://laurenncasey.github.io/RealTimeChatBot/
+https://laurenncasey.github.io/RealTimeChatBox/
 
 Select a chat room on the left sidebar
 
