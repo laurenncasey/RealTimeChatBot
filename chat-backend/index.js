@@ -5,7 +5,7 @@ const { Server } = require('socket.io');
 
 const app = express();
 app.use(cors({
-    origin: 'https://laurenncasey.github.io/RealTimeChatBot/', 
+    origin: 'https://laurenncasey.github.io/RealTimeChatBox/', 
     credentials: true
 }));
 
@@ -13,7 +13,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'https://laurenncasey.github.io/RealTimeChatBot/',
+    origin: 'https://laurenncasey.github.io/RealTimeChatBox/',
     methods: ['GET', 'POST'],
     credentials: true
   },
